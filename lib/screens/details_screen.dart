@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:peliculas_moviles/models/movie.dart';
 
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final String movie =
-        ModalRoute.of(context)?.settings.toString() ?? 'Sin nombre';
-    return const Scaffold(
+    final Movie movie = ModalRoute.of(context)?.settings.arguments as Movie;
+    return Scaffold(
         body: CustomScrollView(
       //widget con comportamientos predefinidos
       slivers: [
         _CustomAppBar(),
         SliverList(
             delegate: SliverChildListDelegate.fixed(
-                [_PosterAndTitle(), _Overview(), ActorSlider()]))
+                [_PosterAndTitle(movie: movie), _Overview(), ActorSlider()]))
       ],
     ));
   }
@@ -54,7 +54,8 @@ class _CustomAppBar extends StatelessWidget {
 }
 
 class _PosterAndTitle extends StatelessWidget {
-  const _PosterAndTitle({super.key});
+  final Movie movie;
+  const _PosterAndTitle({super.key, required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +65,9 @@ class _PosterAndTitle extends StatelessWidget {
       child: Row(children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: const FadeInImage(
+          child: FadeInImage(
             placeholder: AssetImage('assets/no-image.jpg'),
-            image: AssetImage('assets/no-image.jpg'),
+            image: NetworkImage(movie.fullPosterImg),
             height: 250,
           ),
         ),

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:peliculas_moviles/models/movie.dart';
 
 class MovieSlider extends StatelessWidget {
-  const MovieSlider({super.key});
+  final List<Movie> movies;
+  final String? tiitle;
+  const MovieSlider({super.key, required this.movies, this.tiitle});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +26,8 @@ class MovieSlider extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 20,
-              itemBuilder: (_, int index) => _MoviePoster(),
+              itemCount: movies.length,
+              itemBuilder: (_, int index) => _MoviePoster(movie: movies[index]),
             ),
           )
         ],
@@ -34,7 +37,8 @@ class MovieSlider extends StatelessWidget {
 }
 
 class _MoviePoster extends StatelessWidget {
-  const _MoviePoster({super.key});
+  final Movie movie;
+  const _MoviePoster({super.key, required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -48,17 +52,17 @@ class _MoviePoster extends StatelessWidget {
             onTap: () => Navigator.pushNamed(context, 'details', arguments: ''),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: const FadeInImage(
+              child: FadeInImage(
                 placeholder: AssetImage('assets/no-image.jpg'),
-                image: AssetImage('assets/no-image.jpg'),
+                image: NetworkImage(movie.fullPosterImg),
                 width: 130,
                 height: 165,
               ),
             ),
           ),
           const SizedBox(height: 5),
-          const Text(
-            'Id cupidatat reprehenderit aute ullamco proident sunt ipsum laboris voluptate voluptate mollit labore nulla laboris.',
+          Text(
+            movie.title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
